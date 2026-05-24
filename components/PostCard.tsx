@@ -1,21 +1,26 @@
+"use client";
+
+import { useAppDispatch } from "@/lib/store/hooks";
+import { openModal } from "@/lib/store/slices/modalSlice";
+import type { Post } from "@/types/post";
 import styles from "./PostCard.module.css";
 
-interface Post {
-  id: number;
-  title: string;
-  excerpt: string;
-  author: string;
-  date: string;
-  category: string;
-  readTime: string;
-  imageColor: string;
-}
-
 export function PostCard({ post, index }: { post: Post; index: number }) {
+  const dispatch = useAppDispatch();
+
+  function handleOpen() {
+    dispatch(openModal({ type: "post", data: post }));
+  }
+
   return (
     <article
       className={styles.card}
       style={{ "--i": index, "--card-color": post.imageColor } as React.CSSProperties}
+      onClick={handleOpen}
+      onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleOpen()}
+      tabIndex={0}
+      role="button"
+      aria-label={`Read more about ${post.title}`}
     >
       <div className={styles.cardImage}>
         <span className={styles.category}>{post.category}</span>
