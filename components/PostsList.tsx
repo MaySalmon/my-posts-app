@@ -1,0 +1,41 @@
+"use client";
+
+import { usePosts } from "@/hooks/usePosts";
+import { PostCard } from "@/components/PostCard";
+import styles from "@/app/page.module.css";
+
+export function PostsList() {
+  const { posts, isLoading, hasMore, error, loaderRef } = usePosts();
+
+  return (
+    <>
+      <section className={styles.grid} aria-label="Posts">
+        {posts.map((post, i) => (
+          <PostCard key={post.id} post={post} index={i % 6} />
+        ))}
+      </section>
+
+      {error && (
+        <p className={styles.errorMessage} role="alert">
+          <span aria-hidden="true">⚠ </span>{error}
+        </p>
+      )}
+
+      <div
+        ref={loaderRef}
+        className={styles.loaderArea}
+        aria-live="polite"
+        aria-busy={isLoading}
+      >
+        {isLoading && (
+          <div className={styles.loader} role="status" aria-label="Loading posts">
+            <span /><span /><span />
+          </div>
+        )}
+        {!hasMore && !isLoading && !error && (
+          <p className={styles.endMessage}>You've reached the end</p>
+        )}
+      </div>
+    </>
+  );
+}
