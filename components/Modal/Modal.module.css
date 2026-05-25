@@ -7,22 +7,26 @@
   justify-content: center;
   z-index: 50;
   animation: fadeIn 0.15s ease;
+  padding: 20px;
 }
 
 .card {
   background: #111;
   border: 1px solid #2a2a2a;
   max-width: 520px;
-  width: calc(100% - 40px);
+  width: 100%;
   overflow: hidden;
   animation: slideUp 0.2s ease;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
 }
 
-/* ── Post body ── */
+/* ── Color band (shared by edit form) ── */
 .postBand {
-  height: 140px;
+  height: 120px;
   background: var(--band-color, #1a1a2e);
   position: relative;
+  flex-shrink: 0;
 }
 
 .postCategory {
@@ -40,29 +44,76 @@
   backdrop-filter: blur(4px);
 }
 
-.postBody {
-  padding: 28px 28px 0;
-}
-
-.postExcerpt {
-  font-size: 0.9rem;
-  color: #888;
-  line-height: 1.75;
-  margin: 0 0 20px;
-}
-
-.postMeta {
+/* ── Edit form ── */
+.form {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: "DM Mono", "Courier New", monospace;
-  font-size: 11px;
-  color: #444;
-  margin-bottom: 24px;
+  flex-direction: column;
 }
 
-.dot {
-  color: #333;
+.formBody {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-family: "DM Mono", "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.input {
+  background: #0c0c0c;
+  border: 1px solid #252525;
+  color: #e8e8e8;
+  font-size: 0.875rem;
+  padding: 9px 12px;
+  outline: none;
+  width: 100%;
+  font-family: inherit;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  border-color: #444;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.6;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.colorRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.colorSwatch {
+  width: 38px;
+  height: 38px;
+  border: 1px solid #252525;
+  background: none;
+  padding: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
 /* ── Text body ── */
@@ -86,18 +137,21 @@
   margin: 0 0 28px;
 }
 
+/* ── Footer ── */
 .footer {
   display: flex;
   justify-content: flex-end;
-  padding: 0 28px 28px;
+  gap: 10px;
+  padding: 16px 28px 28px;
 }
 
-.closeBtn {
+.closeBtn,
+.cancelBtn {
   font-family: "DM Mono", "Courier New", monospace;
   font-size: 11px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #e8e8e8;
+  color: #888;
   background: transparent;
   border: 1px solid #2a2a2a;
   padding: 9px 20px;
@@ -105,9 +159,33 @@
   transition: border-color 0.15s, color 0.15s;
 }
 
-.closeBtn:hover {
-  border-color: #555;
-  color: #fff;
+.closeBtn:hover,
+.cancelBtn:hover {
+  border-color: #444;
+  color: #ccc;
+}
+
+.saveBtn {
+  font-family: "DM Mono", "Courier New", monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #111;
+  background: #e8e8e8;
+  border: 1px solid #e8e8e8;
+  padding: 9px 24px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: #fff;
+  border-color: #fff;
+}
+
+.saveBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 @keyframes fadeIn {

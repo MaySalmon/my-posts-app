@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import modalReducer from "./slices/modalSlice";
 import toastReducer from "./slices/toastSlice";
+import postsReducer from "./slices/postsSlice";
 
 export const store = configureStore({
   reducer: {
     modal: modalReducer,
     toast: toastReducer,
+    posts: postsReducer,
   },
 });
 

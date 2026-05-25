@@ -3,7 +3,8 @@ import type { Post } from "@/types/post";
 
 export type ModalContent =
   | { type: "text"; data: { title: string; message: string } }
-  | { type: "post"; data: Post };
+  | { type: "post"; data: Post }
+  | { type: "new-post" };
 
 interface ModalState {
   isOpen: boolean;

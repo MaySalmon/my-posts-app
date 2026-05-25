@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { ObjectId } from "mongodb";
 import clientPromise from "@/lib/mongodb";
 import type { PostDocument, PostsApiResponse, Post } from "@/types/post";
 
@@ -45,6 +46,57 @@ export async function GET(request: NextRequest): Promise<NextResponse<PostsApiRe
     });
   } catch (err) {
     console.error("[GET /api/posts]", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
+const REQUIRED_FIELDS = ["title", "excerpt", "author", "category", "readTime", "imageColor"] as const;
+
+export async function POST(request: NextRequest): Promise<NextResponse<Post | { error: string }>> {
+  try {
+    const body = await request.json();
+    const fields: Partial<Record<typeof REQUIRED_FIELDS[number], string>> = {};
+
+    for (const key of REQUIRED_FIELDS) {
+      if (typeof body[key] !== "string" || !body[key].trim()) {
+        return NextResponse.json({ error: `Missing required field: ${key}` }, { status: 400 });
+      }
+      fields[key] = body[key].trim();
+    }
+
+    const now = new Date();
+    const date = now.toISOString().split("T")[0];
+
+    const client = await clientPromise;
+    const collection = client.db(DB_NAME).collection<PostDocument>(COLLECTION);
+
+    const insertedId = new ObjectId();
+    await collection.insertOne({
+      _id: insertedId,
+      title: fields.title!,
+      excerpt: fields.excerpt!,
+      author: fields.author!,
+      date,
+      category: fields.category!,
+      readTime: fields.readTime!,
+      imageColor: fields.imageColor!,
+      createdAt: now,
+    });
+
+    const post: Post = {
+      id: insertedId.toHexString(),
+      title: fields.title!,
+      excerpt: fields.excerpt!,
+      author: fields.author!,
+      date,
+      category: fields.category!,
+      readTime: fields.readTime!,
+      imageColor: fields.imageColor!,
+    };
+
+    return NextResponse.json(post, { status: 201 });
+  } catch (err) {
+    console.error("[POST /api/posts]", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

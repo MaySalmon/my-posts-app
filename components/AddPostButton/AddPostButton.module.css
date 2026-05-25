@@ -1,0 +1,19 @@
+.btn {
+  font-family: "DM Mono", "Courier New", monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #111;
+  background: #e8e8e8;
+  border: 1px solid #e8e8e8;
+  padding: 9px 20px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn:hover {
+  background: #fff;
+  border-color: #fff;
+}
