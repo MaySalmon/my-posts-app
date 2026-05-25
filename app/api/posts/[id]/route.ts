@@ -8,6 +8,28 @@ const COLLECTION = "posts";
 
 const EDITABLE_FIELDS = ["title", "excerpt", "author", "category", "readTime", "imageColor"] as const;
 
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    if (!ObjectId.isValid(id)) {
+      return NextResponse.json({ error: "Invalid post ID" }, { status: 400 });
+    }
+    const client = await clientPromise;
+    const collection = client.db(DB_NAME).collection<PostDocument>(COLLECTION);
+    const result = await collection.deleteOne({ _id: new ObjectId(id) });
+    if (result.deletedCount === 0) {
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    }
+    return new NextResponse(null, { status: 204 });
+  } catch (err) {
+    console.error("[DELETE /api/posts/[id]]", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

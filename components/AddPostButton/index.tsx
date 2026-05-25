@@ -2,9 +2,10 @@
 
 import { useAppDispatch } from "@/lib/store/hooks";
 import { openModal } from "@/lib/store/slices/modalSlice";
+
 import styles from "./AddPostButton.module.css";
 
-export function AddPostButton() {
+export const AddPostButton = () => {
   const dispatch = useAppDispatch();
   return (
     <button
@@ -14,4 +15,4 @@ export function AddPostButton() {
       + New Post
     </button>
   );
-}
+};
